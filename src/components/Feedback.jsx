@@ -10,12 +10,12 @@ class Feedback extends Component {
     positiveFeedback: 0,
   };
 
-  countTotal = () => {
+  countTotalFeedback = () => {
     this.setState((state) => ({
       total: state.good + state.neutral + state.bad,
     }));
   };
-  countpositiveFeedback = () => {
+  countPositiveFeedbackPercentage = () => {
     this.setState((state) => ({
       positiveFeedback: Math.round((state.good * 100) / state.total),
     }));
@@ -39,6 +39,12 @@ class Feedback extends Component {
     }
   };
 
+  onClickHandler = (option) => {
+    this.countFeedback(option);
+    this.countTotalFeedback();
+    this.countPositiveFeedbackPercentage();
+  };
+
   render() {
     const { good, neutral, bad, total, positiveFeedback } = this.state;
 
@@ -46,37 +52,31 @@ class Feedback extends Component {
       <div className={styles.app}>
         <h2 className={styles.title}>Please leave feedback</h2>
         <ul className={styles.buttons}>
-          <li>
+          <li className={styles.buttonList}>
             <button
               className={styles.btn}
               onClick={() => {
-                this.countFeedback("good");
-                this.countTotal();
-                this.countpositiveFeedback();
+                this.onClickHandler("good");
               }}
             >
               good
             </button>
           </li>
-          <li>
+          <li className={styles.buttonList}>
             <button
               className={styles.btn}
               onClick={() => {
-                this.countFeedback("neutral");
-                this.countTotal();
-                this.countpositiveFeedback();
+                this.onClickHandler("neutral");
               }}
             >
               neutral
             </button>
           </li>
-          <li>
+          <li className={styles.buttonList}>
             <button
               className={styles.btn}
               onClick={() => {
-                this.countFeedback("bad");
-                this.countTotal();
-                this.countpositiveFeedback();
+                this.onClickHandler("bad");
               }}
             >
               bad
@@ -97,7 +97,7 @@ class Feedback extends Component {
             </ul>
           </div>
         ) : (
-          ""
+          <p className={styles.noFeedback}>There is no feedback!</p>
         )}
       </div>
     );
