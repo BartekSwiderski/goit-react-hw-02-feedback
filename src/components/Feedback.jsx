@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import styles from "./Feedback.module.css";
+import FeedbackOptions from "./FeedbackOptions";
+import Statistics from "./Statistics";
+import Notification from "./Notification";
 
 class Feedback extends Component {
   state = {
@@ -22,21 +25,9 @@ class Feedback extends Component {
   };
 
   countFeedback = (value) => {
-    if (value === "good") {
-      this.setState((state) => ({
-        good: state.good + 1,
-      }));
-    }
-    if (value === "bad") {
-      this.setState((state) => ({
-        bad: state.bad + 1,
-      }));
-    }
-    if (value === "neutral") {
-      this.setState((state) => ({
-        neutral: state.neutral + 1,
-      }));
-    }
+    this.setState((state) => ({
+      [value]: state[value] + 1,
+    }));
   };
 
   onClickHandler = (option) => {
@@ -51,53 +42,14 @@ class Feedback extends Component {
     return (
       <div className={styles.app}>
         <h2 className={styles.title}>Please leave feedback</h2>
-        <ul className={styles.buttons}>
-          <li className={styles.buttonList}>
-            <button
-              className={styles.btn}
-              onClick={() => {
-                this.onClickHandler("good");
-              }}
-            >
-              good
-            </button>
-          </li>
-          <li className={styles.buttonList}>
-            <button
-              className={styles.btn}
-              onClick={() => {
-                this.onClickHandler("neutral");
-              }}
-            >
-              neutral
-            </button>
-          </li>
-          <li className={styles.buttonList}>
-            <button
-              className={styles.btn}
-              onClick={() => {
-                this.onClickHandler("bad");
-              }}
-            >
-              bad
-            </button>
-          </li>
-        </ul>
+        <FeedbackOptions
+          options={["good", "neutral", "bad"]}
+          onLeaveFeedback={this.onClickHandler}
+        />
         {total !== 0 ? (
-          <div>
-            <h2 className={styles.title}>Statistics</h2>
-            <ul className={styles.stats}>
-              <li className={styles.stat}>Good: {good}</li>
-              <li className={styles.stat}>Neutral: {neutral}</li>
-              <li className={styles.stat}>Bad: {bad}</li>
-              <li className={styles.stat}>Total: {total}</li>
-              <li className={styles.stat}>
-                Positive feedback: {positiveFeedback}%
-              </li>
-            </ul>
-          </div>
+          <Statistics stats={[good, neutral, bad, total, positiveFeedback]} />
         ) : (
-          <p className={styles.noFeedback}>There is no feedback!</p>
+          <Notification message="There is no feedback!" />
         )}
       </div>
     );
